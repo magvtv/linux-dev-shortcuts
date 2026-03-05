@@ -1,0 +1,1 @@
+/home/pharoh/dev-shortcuts/git-setup/git-alias-help.sh

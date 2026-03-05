@@ -1,0 +1,25 @@
+# Show git aliases when entering Desktop project directories
+show_git_aliases_in_desktop() {
+  # Get the current directory
+  local current_dir=$(pwd)
+  
+  # Check if we're in a git repo inside Desktop
+  if [[ "$current_dir" == "/home/pharoh/Desktop"* ]] && git rev-parse --git-dir > /dev/null 2>&1; then
+    # Don't show if we've already shown in this directory (avoid showing on every command)
+    if [[ "$LAST_GIT_ALIAS_HELP_DIR" != "$current_dir" ]]; then
+      /home/pharoh/bin/git-alias-help.sh
+      export LAST_GIT_ALIAS_HELP_DIR="$current_dir"
+    fi
+  else
+    # Reset the variable when we leave Desktop git repos
+    if [[ "$current_dir" != "/home/pharoh/Desktop"* ]]; then
+      export LAST_GIT_ALIAS_HELP_DIR=""
+    fi
+  fi
+}
+
+# Add the function to PROMPT_COMMAND to run before each prompt
+PROMPT_COMMAND="show_git_aliases_in_desktop;${PROMPT_COMMAND:+$PROMPT_COMMAND}"
+
+# Create a command to explicitly show git aliases
+alias githelp='/home/pharoh/bin/git-alias-help.sh'

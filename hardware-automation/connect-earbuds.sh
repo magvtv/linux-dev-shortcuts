@@ -1,0 +1,1 @@
+/home/pharoh/dev-shortcuts/hardware-automation/connect-earbuds.sh

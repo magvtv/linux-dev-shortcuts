@@ -1,0 +1,1 @@
+/home/pharoh/dev-shortcuts/docker-shortcuts/docker-cleanup.sh

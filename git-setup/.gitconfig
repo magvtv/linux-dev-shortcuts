@@ -1,0 +1,47 @@
+[user]
+	email = magutujr@gmail.com
+	name = magvtv
+[credential]
+	helper = cache
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[alias]
+	st = status
+	ci = "!bash -c 'echo \"Enter commit summary:\" && read -r summary && [ -n \"$summary\" ] && echo \"Enter detailed description (press Ctrl+D when done, or just press Enter to skip):\" && description=$(cat) && if [ -n \"$description\" ]; then git commit -m \"$summary\" -m \"$description\"; else git commit -m \"$summary\"; fi'"
+	br = "!bash -c 'if [ $# -eq 0 ]; then echo \"=== BRANCH OVERVIEW ===\" && git for-each-ref --format=\"%(color:bold yellow)%(refname:short)%(color:reset) - %(color:green)%(committerdate:relative)%(color:reset) - %(color:blue)%(authorname)%(color:reset)\" refs/heads/ --sort=-committerdate; else git branch $@; fi' --"
+	co = checkout
+	ds = diff --staged
+	changes = log -n1 -p --format=fuller
+	amend = commit --amend -C HEAD
+	undo = "!bash -c 'echo \"Undo options: 1) Last commit (soft) 2) Last commit (hard) 3) Unstage all\" && read -r choice && case $choice in 1) git reset --soft HEAD~1 && echo \"✓ Last commit undone (changes kept)\";; 2) git reset --hard HEAD~1 && echo \"✓ Last commit undone (changes discarded)\";; 3) git reset HEAD && echo \"✓ All files unstaged\";; *) echo \"Invalid choice\";; esac'"
+	undoci = reset HEAD~1
+	unstage = reset HEAD --
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	ls = log --pretty=format:\"%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]\" --decorate --date=short
+	lg-full = log --name-status --pretty=fuller
+	ac = "!bash -c 'git add -A && echo \"All changes staged. Enter commit summary:\" && read -r summary && [ -n \"$summary\" ] && echo \"Enter detailed description (press Ctrl+D when done, or just press Enter to skip):\" && description=$(cat) && if [ -n \"$description\" ]; then git commit -m \"$summary\" -m \"$description\"; else git commit -m \"$summary\"; fi'"
+	aci = "!bash -c 'echo \"Files to add (space-separated, or . for all):\" && read -r files && git add $files && git status --short && echo \"Enter commit summary:\" && read -r summary && [ -n \"$summary\" ] && echo \"Enter detailed description (press Ctrl+D when done, or just press Enter to skip):\" && description=$(cat) && if [ -n \"$description\" ]; then git commit -m \"$summary\" -m \"$description\"; else git commit -m \"$summary\"; fi'"
+	savestash = stash push -m \"Quick save\"
+	save = !bash -c 'echo \"Name this save point:\" && read -r name && git stash push -m \"$name\"'
+	pop = stash pop
+	ps = !bash -c 'git push 2>&1 | grep -q \"no upstream branch\" && branch=$(git branch --show-current) && echo \"No upstream branch. Push to origin/$branch? (y/n)\" && read -r answer && [ \"$answer\" = \"y\" ] && git push --set-upstream origin \"$branch\" || git push'
+	sync = !bash -c 'echo \"Syncing with upstream...\" && git fetch --all --prune && git pull --rebase && echo \"✓ Synced with upstream\"'
+	new = !bash -c 'echo \"New branch name:\" && read -r name && git checkout -b \"$name\" && echo \"✓ Created and switched to branch: $name\"'
+	sw = !bash -c 'git branch -a | sed \"s/^[* ] //\" | grep -v \"HEAD\" | fzf --height 40% --reverse --preview \"git log --oneline -10 {}\" | xargs git checkout'
+	quick = !bash -c 'git add -A && git commit -m \"WIP: $*\" && echo \"✓ Quick commit created\"' --
+	cleanup = !bash -c 'git branch --merged | grep -v \"\\\\*\\\\|main\\\\|master\\\\|develop\" | xargs -n 1 -r git branch -d && echo \"✓ Cleaned up merged branches\"'
+	recent = !bash -c 'echo \"Show commits from last N days (default 7):\" && read -r days && days=${days:-7} && git log --since=\"$days days ago\" --oneline --graph --pretty=format:\"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset\"'
+	search = !bash -c 'echo \"Search for:\" && read -r query && git log -S\"$query\" --oneline --source --all'
+	who = shortlog -sn
+	files = diff-tree --no-commit-id --name-only -r
+	# Timeline and branch comparison aliases
+	timeline = log --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all --date-order
+	branches = "!bash -c 'echo \"=== BRANCH OVERVIEW ===\" && git for-each-ref --format=\"%(color:bold yellow)%(refname:short)%(color:reset) - %(color:green)%(committerdate:relative)%(color:reset) - %(color:blue)%(authorname)%(color:reset)\" refs/heads/ --sort=-committerdate'"
+	compare = "!bash -c 'current=$(git branch --show-current) && echo \"Current branch: $current\" && echo \"Available branches:\" && git branch | grep -v \"\\* $current\" | sed \"s/^[* ] //\" | cat -n && echo \"\\nEnter number of target branch to compare:\" && read -r num && target=$(git branch | grep -v \"\\* $current\" | sed \"s/^[* ] //\" | sed -n \"${num}p\") && [ -n \"$target\" ] && echo \"\\n=== COMPARISON: $current vs $target ===\" && echo \"\\n📈 Commits ahead (in $current, not in $target):\" && git log --oneline --graph --color=always $target..$current && echo \"\\n📉 Commits behind (in $target, not in $current):\" && git log --oneline --graph --color=always $current..$target || echo \"Invalid selection\"'"
+	ahead-behind = "!bash -c 'current=$(git branch --show-current) && echo \"=== AHEAD/BEHIND ANALYSIS for $current ===\" && for branch in $(git branch -r | grep -v \"HEAD\" | sed \"s|origin/||\" | grep -v \"$current\"); do ahead=$(git rev-list --count $current..origin/$branch 2>/dev/null || echo \"0\"); behind=$(git rev-list --count origin/$branch..$current 2>/dev/null || echo \"0\"); if [ \"$ahead\" != \"0\" ] || [ \"$behind\" != \"0\" ]; then echo \"📊 vs origin/$branch: ↑$behind ahead, ↓$ahead behind\"; fi; done'"
+	merge-preview = "!bash -c 'current=$(git branch --show-current) && echo \"Current branch: $current\" && echo \"Available branches:\" && git branch | grep -v \"\\* $current\" | sed \"s/^[* ] //\" | cat -n && echo \"\\nEnter number of branch to preview merge:\" && read -r num && target=$(git branch | grep -v \"\\* $current\" | sed \"s/^[* ] //\" | sed -n \"${num}p\") && [ -n \"$target\" ] && echo \"\\n=== MERGE PREVIEW: $target → $current ===\" && echo \"\\nFiles that would be affected:\" && git diff --name-only $current...$target && echo \"\\nPotential conflicts:\" && git merge-tree $(git merge-base $current $target) $current $target | grep -A 5 -B 5 \"<<<<<<< \" || echo \"✅ No merge conflicts detected\" || echo \"Invalid selection\"'"
+	relations = "!bash -c 'echo \"=== BRANCH RELATIONSHIPS ===\" && git show-branch --all --color=always | head -20'"
+	fork-point = "!bash -c 'target=${1:-main} && current=$(git branch --show-current) && fork=$(git merge-base $current $target) && echo \"Fork point between $current and $target:\" && git show --oneline $fork'" --

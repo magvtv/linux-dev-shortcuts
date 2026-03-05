@@ -1,0 +1,1 @@
+/home/pharoh/dev-shortcuts/git-setup/test-git-help.sh
