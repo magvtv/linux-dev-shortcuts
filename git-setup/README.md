@@ -11,43 +11,34 @@ This package contains customized git aliases and scripts for visualizing branch 
 - `bashrc-git-portion.txt` - Bash configuration for auto-displaying aliases
 - `test-git-help.sh` - Demo script showing how the auto-display works
 
-## Installation Instructions
+## Quick Installation
 
-### 1. Git Config Setup
-
-Copy the `.gitconfig` file to your home directory:
+Run the automated setup script:
 
 ```bash
-cp .gitconfig ~/.gitconfig
+bash setup-git-aliases.sh
 ```
 
-Or if you already have a .gitconfig, you can merge the aliases section manually.
+This will:
+1. ✅ Install git aliases to `~/.gitconfig`
+2. ✅ Copy helper scripts to `~/bin/`
+3. ✅ Configure bash integration in `~/.bashrc`
+4. ✅ Set up auto-display for git directories
 
-### 2. Git Alias Help Script
-
-Create a bin directory if it doesn't exist and copy the script:
-
-```bash
-mkdir -p ~/bin
-cp git-alias-help.sh ~/bin/
-chmod +x ~/bin/git-alias-help.sh
-```
-
-### 3. Bash Integration
-
-Add the contents of `bashrc-git-portion.txt` to your `~/.bashrc` file:
-
-```bash
-cat bashrc-git-portion.txt >> ~/.bashrc
-```
-
-### 4. Activate Changes
-
-Either restart your terminal or run:
+Then activate the changes:
 
 ```bash
 source ~/.bashrc
 ```
+
+## Manual Installation (if needed)
+
+If you prefer manual setup:
+
+1. **Git Config**: `cp .gitconfig ~/.gitconfig` (or merge manually)
+2. **Helper Script**: `cp git-alias-help.sh ~/bin/ && chmod +x ~/bin/git-alias-help.sh`
+3. **Bash Integration**: `cat bashrc-git-portion.txt >> ~/.bashrc`
+4. **Reload**: `source ~/.bashrc`
 
 ## Key Git Commands
 
@@ -69,9 +60,20 @@ githelp
 ```
 
 ## Automatic Display
-The git alias cheat sheet will automatically display whenever you enter a git repository in your Desktop/ directory, but only once per directory to avoid spam.
 
-## Notes
-- The branch comparison tools work with all git repositories
-- Automatic display only activates in Desktop/ directories
-- You can change the target directory by editing the `show_git_aliases_in_desktop()` function in your .bashrc
+The git alias cheat sheet will automatically display whenever you enter a git repository in:
+- `~/Desktop/` directories
+- `/projects/` directories
+
+The display shows once per directory to avoid spam. You can manually trigger it anytime with:
+
+```bash
+githelp
+```
+
+## Configuration Locations
+
+After setup, these files are used:
+- `~/.gitconfig` - Your git aliases (main configuration)
+- `~/bin/git-alias-help.sh` - The helper script (auto-triggered on cd)
+- `~/.bashrc` - Bash integration (auto-display on directory change)
