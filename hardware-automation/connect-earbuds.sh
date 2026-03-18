@@ -2,7 +2,7 @@
 
 # Enhanced Bluetooth Earbuds Connection Script
 # Author: ZRW
-# Description: Comprehensive script to connect Redmi Buds 6 Play (Noir)
+# Description: Comprehensive script to connect Redmi Buds 6 Play (Onaji)
 # Original from: Bluetooth Troubleshooting project
 
 # Colors for output
@@ -14,8 +14,9 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Device configuration - Redmi Buds 6 Play
-EARBUD_MAC="A4:05:6E:F7:05:95"
-EARBUD_NAME="Noir"
+# EARBUD_MAC="A4:05:6E:F7:05:95"
+EARBUD_MAC="54:84:50:20:AD:F9"
+EARBUD_NAME="Onaji"
 MAX_RETRIES=3
 
 # Log with timestamp
