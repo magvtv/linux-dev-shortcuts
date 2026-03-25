@@ -4,7 +4,8 @@
 # but otherwise functions like the original git ci command
 
 # Show the commit types guide
-/home/pharoh/dev-shortcuts/git-setup/commit_types_cheatsheet.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$SCRIPT_DIR/commit_types_cheatsheet.sh" 2>/dev/null || ~/bin/commit_types_cheatsheet.sh 2>/dev/null || echo "Cheatsheet script not found"
 
 # Ask if they'd like to continue
 echo ""
