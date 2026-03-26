@@ -19,7 +19,7 @@ echo -e "${YELLOW}[1/5]${NC} Installing scripts to ~/bin..."
 mkdir -p ~/bin
 
 # Core scripts to install
-for script in git-alias-help.sh git_smart_commit.sh smart_git_add.sh commit_types_cheatsheet.sh commit_shorthand_notes.md; do
+for script in git-alias-help.sh git_smart_commit.sh smart_git_add.sh commit_types_cheatsheet.sh commit_shorthand_notes.md git_ci_enhanced.sh; do
     if [ -f "$SCRIPT_DIR/$script" ]; then
         cp "$SCRIPT_DIR/$script" ~/bin/"$script"
         chmod +x ~/bin/"$script"
@@ -173,11 +173,11 @@ fi
 # Step 4: Update git aliases to use smart commit
 echo -e "${YELLOW}[4/5]${NC} Updating git aliases for smart commit..."
 
-# Update ci alias to use smart commit (quick mode)
-git config --global alias.ci '!~/bin/git_smart_commit.sh -q'
+# ci alias: delegate cleanly to script (no inline bash in .gitconfig)
+git config --global alias.ci '!~/bin/git_ci_enhanced.sh'
 # Update ac alias to add all + smart commit
 git config --global alias.ac '!git add -A && ~/bin/git_smart_commit.sh -q'
-echo -e "${GREEN}✓${NC} git ci → smart commit (quick mode)"
+echo -e "${GREEN}✓${NC} git ci → enhanced commit script (cheatsheet + summary + description)"
 echo -e "${GREEN}✓${NC} git ac → add all + smart commit (quick mode)\n"
 
 # Step 5: Verify installation
@@ -187,7 +187,7 @@ if command -v git &> /dev/null && grep -q "st = status" ~/.gitconfig; then
     echo -e "${GREEN}✓${NC} Git is installed and configured"
 fi
 
-for script in git-alias-help.sh git_smart_commit.sh smart_git_add.sh commit_types_cheatsheet.sh; do
+for script in git-alias-help.sh git_smart_commit.sh smart_git_add.sh commit_types_cheatsheet.sh git_ci_enhanced.sh; do
     if [ -x ~/bin/$script ]; then
         echo -e "${GREEN}✓${NC} $script is executable"
     else
