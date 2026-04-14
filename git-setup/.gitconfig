@@ -10,7 +10,7 @@
 	required = true
 [alias]
 	st = status
-	ci = "!bash -c 'echo \"Enter commit summary:\" && read -r summary && [ -n \"$summary\" ] && echo \"Enter detailed description (press Ctrl+D when done, or just press Enter to skip):\" && description=$(cat) && if [ -n \"$description\" ]; then git commit -m \"$summary\" -m \"$description\"; else git commit -m \"$summary\"; fi'"
+	ci = !~/bin/git_ci_enhanced.sh
 	br = "!bash -c 'if [ $# -eq 0 ]; then echo \"=== BRANCH OVERVIEW ===\" && git for-each-ref --format=\"%(color:bold yellow)%(refname:short)%(color:reset) - %(color:green)%(committerdate:relative)%(color:reset) - %(color:blue)%(authorname)%(color:reset)\" refs/heads/ --sort=-committerdate; else git branch $@; fi' --"
 	co = checkout
 	ds = diff --staged

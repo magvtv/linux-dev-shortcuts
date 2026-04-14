@@ -36,11 +36,11 @@ smart_git_add() {
     
     echo "🔍 Searching for '$filename'${partial_path:+ in paths containing '$partial_path'}..."
     
-    # Get list of modified files (staged + unstaged)
+    # Get list of changed files (modified, staged, and untracked)
     local modified_files
-    modified_files=$(git diff --name-only HEAD 2>/dev/null)
+    modified_files=$(git status --porcelain 2>/dev/null | awk '{print $NF}')
     if [ -z "$modified_files" ]; then
-        echo "No modified files found in repository"
+        echo "No changed or untracked files found in repository"
         return 1
     fi
     
