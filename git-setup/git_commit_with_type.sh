@@ -14,7 +14,8 @@ show_help() {
   echo "  -h, --help    Display this help message"
   echo "  -s, --skip    Skip the type selection prompt and use a custom message"
   echo ""
-  echo "For more information on commit types, see: /home/pharoh/dev-shortcuts/git-setup/commit_shorthand_notes.md"
+  echo "For more information on commit types, see: commit_shorthand_notes.md"
+  echo "NOTE: This script is superseded by git_smart_commit.sh"
 }
 
 # Check for help flag
@@ -77,7 +78,8 @@ show_commit_type_menu() {
     10) echo "revert";;
     11) echo "custom";;
     12) 
-      less /home/pharoh/dev-shortcuts/git-setup/commit_shorthand_notes.md
+      SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+      less "$SCRIPT_DIR/commit_shorthand_notes.md" 2>/dev/null || less ~/bin/commit_shorthand_notes.md 2>/dev/null || echo "Cheatsheet not found"
       show_commit_type_menu
       ;;
     q|Q) 
